@@ -1,5 +1,4 @@
 import {SEARCH_CHANGE,GET_DATA,ADD_CATEGORY,PUSH_NEW_NEWS} from '../const';
-import data from '../../src/data/data'
 
 export const getDetailsId = (id) => {
     return {
@@ -8,16 +7,20 @@ export const getDetailsId = (id) => {
     }
   }
 
-_staticGetData =() => {
-    return data
-  }
-
-export const getData = () => {
- const data = _staticGetData();
-  return {
-    type: GET_DATA,
-    data
-  }
+export const getData =  () => {
+ return async dispatch => {
+   try{
+    let data  = await fetch('https://project-63826.firebaseio.com/data.json');
+    let dataJson = await data.json();
+    dispatch({
+      type: GET_DATA,
+      data: dataJson
+    })
+   }catch(error){
+     console.log(error)
+   }
+  
+ }
 }
 
 export const addCategory = (category) => {
@@ -28,8 +31,20 @@ export const addCategory = (category) => {
 }
 
 export const pushNewNews = (news) => {
-  return {
-    type: PUSH_NEW_NEWS,
-    news
+  return async dispatch => {
+    try{
+       await fetch('https://project-63826.firebaseio.com/data.json',{
+        method: 'POST',
+        body: JSON.stringify(news)
+      });
+      dispatch({
+        type: PUSH_NEW_NEWS,
+        news
+      })
+    }catch(error){
+      console.log(error)
+    }
+    
   }
+
 }

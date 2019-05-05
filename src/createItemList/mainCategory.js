@@ -7,19 +7,14 @@ import CreateElement from './createElement'
  class MainCategoty extends Component{
 
     componentWillMount(){
-         this.data = this.props.getData();
+        this.props.getData();
+
     }
-
-
-    
-
-
 
     render(){
         return (
             <View style={styles.conteiner}>
                 <CreateElement
-                    data={this.data}
                     navigation={this.props.navigation}
                     />
             </View>
@@ -41,7 +36,7 @@ mapStateToProps = state => {
 mapDispatchToProps = (dispatch) => {
     return { 
         getDetailsId: (item) => dispatch(getDetailsId(item)),
-        getData: () => dispatch(getData())
+        getData:  () =>  dispatch(getData())
     }
 }
 

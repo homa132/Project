@@ -7,15 +7,10 @@ const Header = (props) => {
         <View style={styles.headerConteiner}>
                         <View style={styles.headerButton}>
                             <Button
-                                    title='категорії'
-                                    onPress={()=>props.navigation.dispatch(DrawerActions.toggleDrawer())}/>
+                                    title='Головна'
+                                    onPress={()=> props.navigation.push('Main')}/>
                         </View>
-                            <Text style={styles.headerText}>{props.text}</Text>
-                        <View style={styles.headerButton}>
-                            <Button
-                                    title='cтворити '
-                                    onPress={() => props.navigation.navigate('Create')}/>
-                        </View>
+                        <Text style={styles.headerText}>{props.text}</Text>
         </View>
     )
 }
@@ -37,7 +32,8 @@ const styles = StyleSheet.create({
             fontSize: 25,
             alignSelf: 'center',
             color: 'red',
-            letterSpacing: 5
+            letterSpacing: 5,
+            marginRight: 15,
     },
     headerButton: {
         maxHeight: 35

@@ -1,48 +1,68 @@
 import React, {Component} from 'react';
-import { View, Button, StyleSheet,TextInput} from 'react-native';
+import { Text, Button, StyleSheet,TextInput,CheckBox, ScrollView} from 'react-native';
 import Calendar from '../calendar/calendarSecond';
 import {connect} from 'react-redux'
 import {pushNewNews} from '../../redux/actions/actions';
 import Time from '../time/time';
+import ChangeImage from '../createNews/changePhoto';
+import CheckCategory from '../createNews/category';
+import Header from '../header/headerCreate';
 
  class MainPage extends Component {
 
-     static navigationOptions  = ({navigation}) => {
-        return {
-            headerTitle: 'Створити подію',
-            headerTitleStyle: {
-                marginLeft: '9%',
-                fontSize: 25,
-                alignSelf: 'center',
-                color: 'red',
-                letterSpacing: 5
-            },
-            headerLeft: (<Button
-                    title='Всі події'
-                    onPress={() => navigation.navigate('Main')}/>)}
-    }
+     static navigationOptions  = {
+         header: null
+     }
 
     state = {
-        id: '',
         title: '',
         date: '',
         time: '',
-        category: {
-            dance: true,
-            sport: true,
-            it: true
-        },
         text: '',
+        img: '',
+        category: {
+            dance: false,
+            sport: false,
+            it: false
+        },
     }
+
+    checkCategory = (value) => {
+        this.setState({
+            category: {
+                ...this.state.category,
+                [value]: true
+            }
+        })
+    }
+
+    checkTime = (time) => {
+        this.setState({
+            time
+        })
+    }
+
+    checkData = (date) => {
+        this.setState({date})
+    }
+    
+    checkImg = (img) => {
+        this.setState({img})
+    }
+
 
     saveNews = () => {
-        this.props.pushNewNews(this.state)
-
+        let data = this.state;
+        this.props.pushNewNews(data)
     }
+
 
     render(){
         return( 
-            <View>
+            <ScrollView>
+                <Header
+                    text={'Створити подію'}
+                    navigation={this.props.navigation}/>
                 <TextInput
                     style={styles.TextInput}
                     placeholder='назва заходу'
@@ -51,15 +71,17 @@ import Time from '../time/time';
                         title
                     })}/>
                 <Calendar
-                selected={date=> this.setState({date})}/>
+                selected={this.checkData}/>
                 <Time
-                    selected={time => this.setState({
-                        time
-                    })}/>
+                    selected={this.checkTime}/>
+                <ChangeImage
+                    checkImg={this.checkImg}/>
+                <CheckCategory
+                    checkCategory={this.checkCategory}/>
                 <Button
                 title='Створити'
                 onPress={this.saveNews}/>
-            </View>
+            </ScrollView>
         )
     }
 }

@@ -12,7 +12,6 @@ import {getDetailsId} from '../../redux/actions/actions';
         Object.keys(this.props.state.data).map((key)=>data.push(this.props.state.data[key]))
         let ArrayKeys = [];
         if(this.props.state.category == 'all'){
-            console.log('all')
             ArrayKeys = data;
         }else {
             ArrayKeys = data.map(item => {

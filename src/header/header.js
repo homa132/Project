@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, Button,Text, StyleSheet} from 'react-native';
-import { DrawerActions } from 'react-navigation-drawer';
 
 const Header = (props) => {
     return (
@@ -8,7 +7,7 @@ const Header = (props) => {
                         <View style={styles.headerButton}>
                             <Button
                                     title='категорії'
-                                    onPress={()=>props.navigation.dispatch(DrawerActions.toggleDrawer())}/>
+                                    onPress={()=>props.openDrawer()}/>
                         </View>
                             <Text style={styles.headerText}>{props.text}</Text>
                         <View style={styles.headerButton}>

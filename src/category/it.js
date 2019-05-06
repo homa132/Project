@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import CreateCategory from './creactCategory'
 
 export default class SportPage extends Component {
-    static navigationOptions = {
-        title: 'IT сфера'
+
+    static navigationOptions  = {
+        header: null, 
     }
 
     render(){

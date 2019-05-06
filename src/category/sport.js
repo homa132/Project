@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
-import CreateCategory from './creactCategory'
+import CreateCategory from './creactCategory';
 
 export default class SportPage extends Component  {
+
+    static navigationOptions  = {
+        header: null, 
+    }
 
     render(){
         return( 

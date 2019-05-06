@@ -1,4 +1,4 @@
-import { createDrawerNavigator,createStackNavigator } from "react-navigation";
+import { createStackNavigator } from "react-navigation";
 import SportPage from '../category/sport';
 import MainPage from '../page/main';
 import CreatePage from '../page/createChill';
@@ -12,15 +12,12 @@ const AppNavigator = createStackNavigator(
   {
     Main: MainPage,
     Create: CreatePage,
-    Details: DetailsPage
+    Details: DetailsPage,
+    Sport: SportPage,
+    Dance:DiscoPage,
+    IT: ItPage
   },
 );
 
-const DrawerNav = createDrawerNavigator({
-  Головна: AppNavigator,
-  Спорт: SportPage,
-  Танці:DiscoPage,
-  IT: ItPage
-});
 
-export default DrawerNav;
+export default AppNavigator;

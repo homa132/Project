@@ -36,13 +36,19 @@ import Header from '../header/headerCreate';
         })
     }
 
-    checkTime = (time) => {
+    checkTime = (chengeTime) => {
+        let time = chengeTime.split('-');
+        time = time.map(item=>item.length == 1?`0${item}`:item)
+        time = time.join('-');
         this.setState({
             time
         })
     }
 
-    checkData = (date) => {
+    checkData = (chengeDate) => {
+        let date = chengeDate.split('-');
+        date = date.map(item=>item.length == 1?`0${item}`:item);
+        date = date.join('-');
         this.setState({date})
     }
     

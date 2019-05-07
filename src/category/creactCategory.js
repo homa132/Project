@@ -22,7 +22,7 @@ class CreateCategory extends Component {
 
         return (    
             <DrawerLayoutAndroid
-                drawerWidth={250}
+                drawerWidth={290}
                 ref={(_drawer) => this.drawer = _drawer}
                 drawerPosition={DrawerLayoutAndroid.positions.Left}
                 renderNavigationView={() => ListDrawer(this.props)}>

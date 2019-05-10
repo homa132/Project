@@ -1,111 +1,77 @@
 import React,{Component} from 'react';
-import {View, Text,Image,FlatList,Button,StyleSheet} from 'react-native';
+import {FlatList} from 'react-native';
 import {connect} from 'react-redux';
-import {getDetailsId} from '../../redux/actions/actions';
+import {filterData,getData,setReservData} from '../../redux/actions/actions';
+import Item from './item';
 
 
- class createElement extends Component  {
+class createElement extends Component  {
 
+    constructor(props){
+        super(props);
+        this.state = {
+            FilterData: props.state.filterData,
+            data: props.state.data
+        };
+        this.filter()
+        console.log(props.state.data)
+    }
 
-     render(){
-        let data = [];
-            
-        Object.keys(this.props.state.data).forEach((key)=>data.push(this.props.state.data[key]))
-        let filterData = [];
+    filter = async () => {
+        console.log('render')
+        if(!this.props.state.data){
+            await this.props.getData();
+        }
+        console.log(this.props.state.data);
+        let { data } = this.props.state;
+        
+        // Сортировка по категории
         if(this.props.state.category == 'all'){
-            filterData = data;
+
         }else {
-            filterData = data.filter(item => {
+            data = data.filter(item => {
                 return item.category[this.props.state.category]
             })
         }
 
         let timeJoin = [];
 
-        filterData.forEach((item) =>{
-                let date = [];
-                item.date.split('-').forEach(item=> date.push(item));
-                item.time.split('-').forEach(item=> date.push(item));
-                timeJoin.push(date.join(''));
-                filterData.forEach((item,index)=> {
-                    item == null? null: item.filterDate = timeJoin[index]
-                    })
-            
-        })
+        // Сортировка по  дате
+        if(data[0]){
+            if(!data[0].filterDate){
+                data.forEach((item) =>{
+                    let date = [];
+                    item.date.split('-').forEach(item=> date.push(item));
+                    item.time.split('-').forEach(item=> date.push(item));
+                    timeJoin.push(date.join(''));
+                    data.forEach((item,index)=> {
+                        item == null? null: item.filterDate = timeJoin[index]
+                        })
+                })
+            }
+            data.sort(function(a,b){
+                return Number(b.filterDate) - Number(a.filterDate)
+              })
+        }
 
-        filterData.sort(function(a,b){
-            return Number(b.filterDate) - Number(a.filterDate)
-          })
+        await this.props.filterData(data);
+        await this.props.setReservData(data);
+    }
 
 
-        const prop = this.props;
-        const element = <FlatList
-                            data={filterData}
-                            renderItem={({item})=>{
-                                if(!item){
-                                    return false
-                                }
-                                const { img, date, title,category,id} = item;
-                                let key = Object.keys(category);
-                                return (
-                                    <View  style={styles.itemConteiner}>
-                                        <Image 
-                                        source={{uri:img ? img : '' }}
-                                        style={styles.image}
-                                        />
-                                        <View style={styles.textData}>
-                                            <Text style={styles.itemText}>{title}</Text>
-                                            <Text style={styles.itemText}>{date}</Text>
-                                            <Text style={styles.itemText}>Категорії:{key.map(item => {
-                                               return category[item]? `${item}  `: null
-                                            })}</Text>
-                                        </View>
-                                        <Button
-                                            title='більше'
-                                            onPress={() => {
-                                                prop.getDetailsId(id);
-                                                prop.navigation.push('Details')
-                                                }}/>
-                                    </View>
-                                )}}
-                            keyExtractor={(item, index) => `${index} ${Math.random() * 1000}`}
-                            />
-        return element
+     render(){
+        return (
+            <FlatList
+                data={this.props.state.filterData}
+                refreshing={true}
+                keyExtractor={(item, index) => `${index} ${Math.random() * 1000}`}
+                renderItem={({item})=> !item?false:<Item item={item}/>}
+                />
+        )
      }
             
 }
-const styles = StyleSheet.create({
-    conteiner : {
-        flex: 1,
-    },
-    itemConteiner: {
-        marginLeft: 10,
-        marginRight: 10,
-        padding: 10,
-        borderColor: 'rgba(46, 0, 250, 0.61)',
-        borderWidth: 3,
-        marginTop: 10,
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderRadius: 20,
-        minHeight: 110
-    },
-    image: {
-        width: 100,
-        height: 70,
-        borderRadius: 20,
-    },
-    textData: {
-        padding: 10,
-        width: '50%'
-    },
-    itemText: {
-        fontSize: 13,
-        letterSpacing: 2.5
-    }
-})
+
 mapStateToProps = (state) => {
     return {
         state: state.first
@@ -113,7 +79,9 @@ mapStateToProps = (state) => {
 }
 mapDispatchToProps = (dispatch) => {
     return { 
-        getDetailsId: (item) => dispatch(getDetailsId(item)),
+        filterData: (data) => dispatch(filterData(data)),
+        getData: () => dispatch(getData()),
+        setReservData: (data) => dispatch(setReservData(data))
     }
 }
 

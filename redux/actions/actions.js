@@ -1,20 +1,16 @@
-import {SEARCH_CHANGE,GET_DATA,ADD_CATEGORY,PUSH_NEW_NEWS} from '../const';
-
-export const getDetailsId = (id) => {
-    return {
-      type: SEARCH_CHANGE,
-      detailsId:id
-    }
-  }
+import {GET_DATA,ADD_CATEGORY,PUSH_NEW_NEWS,SET_FILTER_DATA,
+  SET_RESERV_FILTER_DATA} from '../const';
 
 export const getData =  () => {
  return async dispatch => {
    try{
     let data  = await fetch('https://project-63826.firebaseio.com/data.json');
     let dataJson = await data.json();
+    let ArrayData = [];
+    Object.keys(dataJson).forEach((key)=>ArrayData.push(dataJson[key]));
     dispatch({
       type: GET_DATA,
-      data: dataJson
+      data: ArrayData
     })
    }catch(error){
      console.log(error)
@@ -43,8 +39,20 @@ export const pushNewNews = (news) => {
       })
     }catch(error){
       console.log(error)
-    }
-    
+    } 
   }
+}
 
+export const filterData = (filterData) => {
+  return {
+    type: SET_FILTER_DATA,
+    filterData
+  }
+}
+
+export const setReservData = (filterData) => {
+  return {
+    type:SET_RESERV_FILTER_DATA,
+    reservFilterData: filterData
+  }
 }

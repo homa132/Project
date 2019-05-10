@@ -1,43 +1,62 @@
 import React from 'react';
-import {View, Button,Text, StyleSheet} from 'react-native';
-import { DrawerActions } from 'react-navigation-drawer';
-
+import {View, TouchableOpacity,Text, StyleSheet} from 'react-native';
+import {BoxShadow} from 'react-native-shadow';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 const Header = (props) => {
     return (
         <View style={styles.headerConteiner}>
-                        <View style={styles.headerButton}>
-                            <Button
-                                    title='Головна'
-                                    onPress={()=> props.navigation.push('Main')}/>
-                        </View>
-                        <Text style={styles.headerText}>{props.text}</Text>
+                            <BoxShadow setting={shadowButton}>
+                                <TouchableOpacity style={styles.buttonConteiner}
+                                onPress={() => props.navigation.navigate('Main')}>
+                                    <Icon name='home' size={35} color="#000000" />                  
+                                </TouchableOpacity>
+                            </BoxShadow>
+                            <View style={{flex: 1, alignItems: 'center'}}>
+                                <Text style={styles.headerText}>{props.text}</Text>
+                            </View>
         </View>
     )
 }
-
 const styles = StyleSheet.create({
     headerConteiner: {
         flex: 1,
         flexDirection: 'row',
-        maxHeight: 60,
-        minHeight: 60,
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        borderBottomColor: "rgb(212, 212, 212)",
-        borderBottomWidth: 2.6,
-        paddingLeft: 10,
-        paddingRight: 10,
+        backgroundColor:'rgb(238, 253, 243)',
+        paddingVertical: 10,
+        borderBottomColor: 'rgba(11, 75, 27, 0.5)',
+        borderBottomWidth: 3,
     },
     headerText: {
-            fontSize: 25,
-            alignSelf: 'center',
-            color: 'red',
-            letterSpacing: 5,
-            marginRight: 15,
+        fontSize: 27,
+        alignSelf: 'center',
+        color: 'rgba(0, 0, 0, 0.781)',
+        letterSpacing: 5,
+        fontWeight: 'bold',
     },
-    headerButton: {
-        maxHeight: 35
+    buttonConteiner: {
+        width: 45,
+        height: 45,
+        backgroundColor: 'rgb(165, 247, 192)',
+        borderColor:'rgb(190, 248, 209)',
+        borderWidth: 5,
+        borderRadius: 1,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })
 
+const shadowButton = {
+    width:45,
+    height:45,
+    color:'#00FF00',
+    border:5,
+    radius:5,
+    opacity:0.3,
+    x:0,
+    y:0,
+    style: {marginHorizontal: 20}
+}
 export default Header

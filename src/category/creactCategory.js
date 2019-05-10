@@ -4,14 +4,14 @@ import Header from '../header/header';
 import ItemList from '../createItemList/createElement';
 import CreateCalendar from '../calendar/calendarSecond';
 import {connect} from 'react-redux';
-import {addCategory,getData,filterData} from '../../redux/actions/actions';
+import {addCategory,getData,filterData,setReservData} from '../../redux/actions/actions';
 import ListDrawer from './ListNavigation';
 
 class CreateCategory extends Component {
     constructor(props) {
         super(props);
         this.openDrawer = this.openDrawer.bind(this);
-        props.addCategory(props.category);
+        this.filter();
     }
 
     openDrawer() {
@@ -30,9 +30,50 @@ class CreateCategory extends Component {
         filterData(state.reservFilterData);
     }
 
+    filter = async (sortData) => {
+        await this.props.addCategory(this.props.category);
+        if(!this.props.state.data){
+            await this.props.getData();
+        }
+        
+        let data = [];
+        Object.keys(this.props.state.data).forEach((key)=>data.push(this.props.state.data[key]))
+        // Сортировка по категории
+        if(this.props.state.category == 'all'){
+            data = data;
+        }else {
+            data = data.filter(item => {
+                return item.category[this.props.state.category]
+            })
+        }
+
+        let timeJoin = [];
+
+        // Сортировка по  дате
+        if(sortData || data[0]){
+            if(sortData || !data[0].filterDate){
+                data.forEach((item) =>{
+                    let date = [];
+                    item.date.split('-').forEach(item=> date.push(item));
+                    item.time.split('-').forEach(item=> date.push(item));
+                    timeJoin.push(date.join(''));
+                    data.forEach((item,index)=> {
+                        item == null? null: item.filterDate = timeJoin[index]
+                        })
+                })
+            }
+            data.sort(function(a,b){
+                return Number(b.filterDate) - Number(a.filterDate)
+              })
+        }
+
+        await this.props.filterData(data);
+        await this.props.setReservData(data);
+    }
+
+
     render(){
-        console.log(this.props.state.data)
-        return (    
+        return (
             <DrawerLayoutAndroid
                 drawerWidth={290}
                 ref={(_drawer) => this.drawer = _drawer}
@@ -43,8 +84,7 @@ class CreateCategory extends Component {
                                 refreshControl={
                                     <RefreshControl
                                       refreshing={false}
-                                      onRefresh={() => {this.props.getData();
-                                                    console.log('revers')}}
+                                      onRefresh={() => {this.filter(true)}}
                                     />
                                   }>
                                 <Header
@@ -56,11 +96,11 @@ class CreateCategory extends Component {
                                     selected={this.selectedData}
                                     allDataItems={this.allDataItems}
                                     twoBottom={true}
-                                    dataForUpdate={this.props.state.data}
                                     />
                                 <ItemList
-                                    category={this.props.category}
-                                    navigation={this.props.navigation}/>
+                                    category={this.props.state.category}
+                                    navigation={this.props.navigation}
+                                    data={this.props.state.filterData}/>
                             </ScrollView>
                         </View>
             </DrawerLayoutAndroid>
@@ -68,7 +108,6 @@ class CreateCategory extends Component {
     }
 }
 
-let reservData = false;
 
 const styles = StyleSheet.create({
     mainConteiner: {
@@ -92,6 +131,7 @@ mapDispatchToProps = (dispatch) => {
         addCategory: (category) => dispatch(addCategory(category)),
         getData: () => dispatch(getData()),
         filterData: (data) => dispatch(filterData(data)),
+        setReservData: (data) => dispatch(setReservData(data))
     }
 }
 

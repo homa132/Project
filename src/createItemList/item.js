@@ -11,7 +11,7 @@ export default class Item extends Component {
     render(){
         const { img, date, title,category,time,text} = this.props.item;
         const key = Object.keys(category);
-
+        
         return (
             <View style={styles.conteiner}>
                 <Text style={styles.title}>{title}</Text>

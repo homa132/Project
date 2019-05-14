@@ -1,6 +1,5 @@
 export const SEARCH_CHANGE = 'SEARCH_CHANGE';
-export const GET_DATA = 'GET_DATA';
 export const ADD_CATEGORY = 'ADD_CATEGORY';
-export const PUSH_NEW_NEWS = 'PUSH_NEW_NEWS';
 export const SET_FILTER_DATA = 'SET_FILTER_DATA';
 export const SET_RESERV_FILTER_DATA = 'SET_RESERV_FILTER_DATA';
+export const NEW_DATA = 'NEW_DATA';

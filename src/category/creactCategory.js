@@ -4,7 +4,7 @@ import Header from '../header/header';
 import ItemList from '../createItemList/createElement';
 import CreateCalendar from '../calendar/calendarSecond';
 import {connect} from 'react-redux';
-import {addCategory,getData,filterData,setReservData} from '../../redux/actions/actions';
+import {addCategory,filterData,setReservData} from '../../redux/actions/actions';
 import ListDrawer from './ListNavigation';
 
 class CreateCategory extends Component {
@@ -30,49 +30,29 @@ class CreateCategory extends Component {
         filterData(state.reservFilterData);
     }
 
-    filter = async (sortData) => {
-        await this.props.addCategory(this.props.category);
-        if(!this.props.state.data){
-            await this.props.getData();
-        }
+    filter =  () => {
+        console.log(this.props.state.newData);
         
-        let data = [];
-        Object.keys(this.props.state.data).forEach((key)=>data.push(this.props.state.data[key]))
+        let data = this.props.state.newData;
+        data.sort((a,b) => {
+            return b.dateTime - a.dateTime
+        })
         // Сортировка по категории
-        if(this.props.state.category == 'all'){
+        if(this.props.category == 'all'){
             data = data;
         }else {
             data = data.filter(item => {
-                return item.category[this.props.state.category]
+                return item.category[this.props.category]
             })
         }
 
-        let timeJoin = [];
-
-        // Сортировка по  дате
-        if(sortData || data[0]){
-            if(sortData || !data[0].filterDate){
-                data.forEach((item) =>{
-                    let date = [];
-                    item.date.split('-').forEach(item=> date.push(item));
-                    item.time.split('-').forEach(item=> date.push(item));
-                    timeJoin.push(date.join(''));
-                    data.forEach((item,index)=> {
-                        item == null? null: item.filterDate = timeJoin[index]
-                        })
-                })
-            }
-            data.sort(function(a,b){
-                return Number(b.filterDate) - Number(a.filterDate)
-              })
-        }
-
-        await this.props.filterData(data);
-        await this.props.setReservData(data);
+         this.props.filterData(data);
+         this.props.setReservData(data);
     }
 
 
     render(){
+
         return (
             <DrawerLayoutAndroid
                 drawerWidth={290}
@@ -84,7 +64,7 @@ class CreateCategory extends Component {
                                 refreshControl={
                                     <RefreshControl
                                       refreshing={false}
-                                      onRefresh={() => {this.filter(true)}}
+                                      onRefresh={() => this.filter()}
                                     />
                                   }>
                                 <Header

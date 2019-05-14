@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import {BoxShadow} from 'react-native-shadow';
 import Icon from 'react-native-vector-icons/Feather';
 
@@ -13,17 +13,13 @@ export default class ChangePhoto extends Component {
 
   photos = () => {
 
-    ImagePicker.launchImageLibrary({
-      mediaType: 'photo',
-      maxWidth: 700,
-      maxHeight:700,
-      quality: 0.6
-    }, (response) => {
-      const data = `data:${response.type};base64,${response.data}`;
-      this.props.checkImg(data)
-      this.setState({
-        urlImage: data
-      })
+    ImagePicker.openPicker({
+      multiple: true,
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(images => {
+      console.log(images);
     });
 
   }

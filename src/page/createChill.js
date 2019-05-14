@@ -7,33 +7,39 @@ import Time from '../time/time';
 import ChangeImage from '../createNews/changePhoto';
 import CheckCategory from '../createNews/category';
 import Header from '../header/headerCreate';
+import firebase from 'react-native-firebase';
 
 class MainPage extends Component {
-
+    constructor(props){
+        super(props);
+        this.ref = firebase.firestore().collection('data');
+        this.state = {
+            dateTime: 0,
+            title: '',
+            date: '',
+            time: '',
+            text: '',
+            img: '',
+            category: {
+                dance: false,
+                sport: false,
+                it: false
+            },
+            place: '',
+            contacts: {
+                telegrame: '',
+                viber: '',
+                inst: '',
+                mobileNumber: '',
+                site: ''
+            }
+        }
+    }
      static navigationOptions  = {
          header: null
      }
 
-    state = {
-        title: '',
-        date: '',
-        time: '',
-        text: '',
-        img: '',
-        category: {
-            dance: false,
-            sport: false,
-            it: false
-        },
-        place: '',
-        contacts: {
-            telegrame: '',
-            viber: '',
-            inst: '',
-            mobileNumber: '',
-            site: ''
-        }
-    }
+    
 
     checkCategory = (value) => {
         this.setState({
@@ -64,10 +70,18 @@ class MainPage extends Component {
         this.setState({img})
     }
 
+    newDataTime = () => {
+        const newDateTime = [];
+        const {date,time} = this.state;
+        date.split('-').forEach(item=> newDateTime.push(item));
+        time.split('-').forEach(item=> newDateTime.push(item));
+        let dateTime = newDateTime.join('');
+        this.setState({dateTime})
+    }
 
-    saveNews = () => {
-        let data = this.state;
-        this.props.pushNewNews(data)
+    saveNews = async () => {
+        await this.newDataTime();
+        await this.ref.doc(this.state.dateTime).set(this.state)
     }
 
 
@@ -82,9 +96,7 @@ class MainPage extends Component {
                             style={styles.TextInputTitle}
                             placeholder='назва заходу'
                             value={this.state.title}
-                            onChangeText={(title) => this.setState({
-                                title
-                            })}/>
+                            onChangeText={(title) => this.setState({title})}/>
                         <ChangeImage
                             checkImg={this.checkImg}/>
                         <View style={{flexDirection: 'row'}}>

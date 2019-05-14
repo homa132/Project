@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "449385989505",
+    "firebase_url": "https://relaxer-a0e8f.firebaseio.com",
+    "project_id": "relaxer-a0e8f",
+    "storage_bucket": "relaxer-a0e8f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449385989505:android:106325043233ce10",
+        "android_client_info": {
+          "package_name": "com.project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "449385989505-ve2ckdc6tqkgr2jcngvhkdi504tjv7fh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwfpCwKujSs0k9Q8C_gCHzuUEdqxTPZLo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "449385989505-ve2ckdc6tqkgr2jcngvhkdi504tjv7fh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

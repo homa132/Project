@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {View,Text,TouchableOpacity,StyleSheet,Image} from 'react-native';
+import {View,Text,TouchableOpacity,StyleSheet,Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
+import SliderImage from '../sliderImages/sliderImages'
 
 export default class Item extends Component {
 
@@ -15,9 +16,10 @@ export default class Item extends Component {
         return (
             <View style={styles.conteiner}>
                 <Text style={styles.title}>{title}</Text>
-                <Image
-                    source={{uri:img ? img : '' }}
-                    style={styles.image}/>
+                <View style={{width: Dimensions.get('window').width, position: 'relative',left:-20}}>
+                    <SliderImage
+                        images={img}/>
+                </View>
                 <Text style={styles.date}>Категорія: {key.map(item => {
                         return category[item]? `${item} `: null
                      })}

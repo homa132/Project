@@ -19,7 +19,7 @@ class MainPage extends Component {
             date: '',
             time: '',
             text: '',
-            img: '',
+            img: [],
             category: {
                 dance: false,
                 sport: false,

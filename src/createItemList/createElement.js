@@ -9,12 +9,10 @@ function createElement (props)  {
             <FlatList
                 data={props.data}
                 refreshing={true}
-                keyExtractor={(item, index) => `${index} ${Math.random() * 1000}`}
+                keyExtractor={(item, index) => `${index} ${item.dateTime}`}
                 renderItem={({item})=> !item?false:<Item item={item}/>}
                 />
         )
-
-            
 }
 
 

@@ -9,12 +9,30 @@ import ItPage from '../category/it';
 
 const AppNavigator = createStackNavigator(
   {
-    Main: MainPage,
-    Create: CreatePage,
-    Sport: SportPage,
-    Dance:DiscoPage,
-    IT: ItPage
-  },
+    Main: {
+      screen: MainPage,
+      
+    },
+    Create: {
+      screen:CreatePage,
+      
+    },
+    Sport: {
+      screen:SportPage,
+      
+    },
+    Dance:{
+      screen:DiscoPage,
+      
+    },
+    IT: {
+      screen:ItPage,
+      
+    }
+  },{
+    headerMode: 'none',
+    mode: 'modal'
+  }
 );
 
 

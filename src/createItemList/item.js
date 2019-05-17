@@ -10,17 +10,17 @@ export default class Item extends Component {
     }
 
     render(){
-        const { img, date, title,category,time,text} = this.props.item;
+        const { urlImg, date, title,category,time,text} = this.props.item;
         const key = Object.keys(category);
         
         return (
             <View style={styles.conteiner}>
                 <Text style={styles.title}>{title}</Text>
-                <View style={{width: Dimensions.get('window').width, position: 'relative',left:-20}}>
+                <View style={styles.conteinerSlider}>
                     <SliderImage
-                        images={img}/>
+                        images={urlImg}/>
                 </View>
-                <Text style={styles.date}>Категорія: {key.map(item => {
+                <Text style={[styles.date,{marginTop:20}]}>Категорія: {key.map(item => {
                         return category[item]? `${item} `: null
                      })}
                 </Text>
@@ -42,7 +42,7 @@ export default class Item extends Component {
                 :
 
                 <TouchableOpacity
-                    onPress={ () => this.setState({more:!this.state.more})}
+                    onPress={() => this.setState({more:!this.state.more})}
                     style={styles.conteinerMore}>
                     <Icon name='down' size={20} color="#FFFFFF" />
                     <Text style={styles.textMore}>БІЛЬШЕ</Text>
@@ -57,34 +57,25 @@ const styles = StyleSheet.create({
     conteiner : {
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        borderColor: 'rgba(183, 248, 199, 0.74)',
-        borderWidth: 5,
-        marginHorizontal: 5,
         backgroundColor: 'rgba(3, 250, 65, 0.4)',
-        marginBottom:5,
+        marginBottom:20,
         padding: 10,
-        borderRadius: 0.5,
-    },
-    image : {
-        width: 200,
-        height: 200,
-        overflow: 'hidden',
-        alignSelf: 'center',
-        marginVertical: 3,
+        borderRadius: 5,
     },
     title: {
         color: 'black',
-        fontSize: 22,
+        fontSize: 28,
         alignSelf: 'center',
-        letterSpacing: 4.5,
+        letterSpacing: 5,
         fontWeight: 'bold',
+        marginBottom: 20
     },
     date : {
         color: 'black',
-        fontSize: 17,
-        marginBottom: 2,
+        fontSize: 20,
+        marginBottom: 4,
         marginRight: 15,
-        letterSpacing: 2.5,
+        letterSpacing: 3,
     },
     conteinerMore: {
         width: 115,
@@ -101,5 +92,11 @@ const styles = StyleSheet.create({
         color: 'rgba(255, 255, 255, 0.842)',
         fontSize: 17,
         letterSpacing: 2,
+    },
+    conteinerSlider: {
+        width: Dimensions.get('window').width,
+        position: 'relative',
+        left:-15,
+
     }
 })

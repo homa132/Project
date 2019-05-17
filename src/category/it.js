@@ -3,9 +3,6 @@ import CreateCategory from './creactCategory'
 
 export default class SportPage extends Component {
 
-    static navigationOptions  = {
-        header: null, 
-    }
 
     render(){
         return( 

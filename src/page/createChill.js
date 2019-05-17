@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, TouchableOpacity,Text, StyleSheet,TextInput, ScrollView} from 'react-native';
+import { View, TouchableOpacity,Text, StyleSheet,TextInput, ScrollView,Button} from 'react-native';
 import Calendar from '../calendar/calendarSecond';
 import {connect} from 'react-redux'
 import {pushNewNews} from '../../redux/actions/actions';
@@ -12,14 +12,12 @@ import firebase from 'react-native-firebase';
 class MainPage extends Component {
     constructor(props){
         super(props);
-        this.ref = firebase.firestore().collection('data');
         this.state = {
             dateTime: 0,
             title: '',
             date: '',
             time: '',
             text: '',
-            img: [],
             category: {
                 dance: false,
                 sport: false,
@@ -32,14 +30,10 @@ class MainPage extends Component {
                 inst: '',
                 mobileNumber: '',
                 site: ''
-            }
+            },
+            urlImg: []
         }
     }
-     static navigationOptions  = {
-         header: null
-     }
-
-    
 
     checkCategory = (value) => {
         this.setState({
@@ -67,7 +61,7 @@ class MainPage extends Component {
     }
     
     checkImg = (img) => {
-        this.setState({img})
+        imgOnServer = img;
     }
 
     newDataTime = () => {
@@ -80,8 +74,19 @@ class MainPage extends Component {
     }
 
     saveNews = async () => {
-        await this.newDataTime();
-        await this.ref.doc(this.state.dateTime).set(this.state)
+        this.newDataTime();
+        let urlImg = [];
+        for(let i =0; i < imgOnServer.length;i++){
+            let images = await  firebase.storage().ref(`images/${this.state.dateTime}/${i}`)
+            .putFile(imgOnServer[i].path);
+            urlImg.push(images.downloadURL);
+        }
+        this.setState({urlImg});
+        firebase.firestore().collection('data').doc(this.state.dateTime).set(this.state);
+        this.setState({ dateTime: 0,title: '',date: '',time: '',text: '',place: '',urlImg: [],
+            category: {dance: false,sport: false,it: false},
+            contacts: {telegrame: '',viber: '',inst: '',mobileNumber: '',site: ''},
+            })
     }
 
 
@@ -115,10 +120,12 @@ class MainPage extends Component {
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
-
         )
     }
 }
+// Потрібно для відправки на сервер фото
+let imgOnServer = [];
+
 
 const styles = StyleSheet.create({
     TextInputTitle: {

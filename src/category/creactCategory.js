@@ -4,7 +4,7 @@ import Header from '../header/header';
 import ItemList from '../createItemList/createElement';
 import CreateCalendar from '../calendar/calendarSecond';
 import {connect} from 'react-redux';
-import {addCategory,filterData,setReservData} from '../../redux/actions/actions';
+import {filterData,setReservData} from '../../redux/actions/actions';
 import ListDrawer from './ListNavigation';
 
 class CreateCategory extends Component {
@@ -31,7 +31,6 @@ class CreateCategory extends Component {
     }
 
     filter =  () => {
-        console.log(this.props.state.newData);
         
         let data = this.props.state.newData;
         data.sort((a,b) => {
@@ -108,7 +107,6 @@ mapStateToProps =(state) => {
 
 mapDispatchToProps = (dispatch) => {
     return {
-        addCategory: (category) => dispatch(addCategory(category)),
         getData: () => dispatch(getData()),
         filterData: (data) => dispatch(filterData(data)),
         setReservData: (data) => dispatch(setReservData(data))

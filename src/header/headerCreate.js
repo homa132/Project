@@ -7,7 +7,7 @@ const Header = (props) => {
         <View style={styles.headerConteiner}>
                             <BoxShadow setting={shadowButton}>
                                 <TouchableOpacity style={styles.buttonConteiner}
-                                onPress={() => props.navigation.navigate('Main')}>
+                                onPress={() => props.navigation.replace('Main')}>
                                     <Icon name='home' size={35} color="#000000" />                  
                                 </TouchableOpacity>
                             </BoxShadow>

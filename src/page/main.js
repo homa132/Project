@@ -22,10 +22,6 @@ class MainPage extends Component {
         this.unsubscribe();
     }
     
-    static navigationOptions  = {
-        header: null, 
-    }
-
     
     onCollectionUpdate =  (querySnapshot) => {
         const data = [];

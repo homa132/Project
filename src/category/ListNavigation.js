@@ -22,7 +22,7 @@ const _createButton = (text,nav,icon) => {
     return (
       <BoxShadow setting={shadowButton}>
                 <TouchableOpacity style={styles.conteinerButton}
-                                  onPress={()=> props.navigation.navigate(nav)}>
+                                  onPress={()=> props.navigation.replace(nav)}>
                   <Icon name={icon} size={30} color="#000000" />                  
                   <Text style={styles.textButton}>{text}</Text>
                 </TouchableOpacity>
@@ -33,13 +33,7 @@ const _createButton = (text,nav,icon) => {
     return (
       <ScrollView style={{height: '100%',backgroundColor: 'rgb(238, 253, 243)',}}>
         <View style={styles.conteiner}>
-          <BoxShadow setting={shadowButton}>
-                  <TouchableOpacity style={styles.conteinerButton}
-                                    onPress={()=> props.navigation.push('Main')}>
-                    <Icon name={'home'} size={30} color="#000000" />
-                    <Text style={styles.textButton}>Головна</Text>
-                  </TouchableOpacity>
-          </BoxShadow>
+            {_createButton('Головна','Main','home')}
             {_createButton('Спорт','Sport','medal')}
             {_createButton('Танці','Dance','drink')}
             {_createButton('IT сфера','IT','laptop')}

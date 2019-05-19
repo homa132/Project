@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, TouchableOpacity,Text, StyleSheet,TextInput, ScrollView,Button} from 'react-native';
+import { View, TouchableOpacity,Text, StyleSheet,TextInput, ScrollView,Dimensions, Linking} from 'react-native';
 import Calendar from '../calendar/calendarSecond';
 import {connect} from 'react-redux'
 import {pushNewNews} from '../../redux/actions/actions';
@@ -8,6 +8,8 @@ import ChangeImage from '../createNews/changePhoto';
 import CheckCategory from '../createNews/category';
 import Header from '../header/headerCreate';
 import firebase from 'react-native-firebase';
+import SliderImage from '../sliderImages/sliderImages'
+import ContactsLinks from './contactsLinks';
 
 class MainPage extends Component {
     constructor(props){
@@ -23,22 +25,23 @@ class MainPage extends Component {
                 sport: false,
                 it: false
             },
+            price: '',
             place: '',
             contacts: {
                 telegrame: '',
                 viber: '',
                 inst: '',
-                mobileNumber: '',
-                site: ''
+                site: '',
             },
-            urlImg: []
+            urlImg: [],
+            imgOnServer: ['https://firebasestorage.googleapis.com/v0/b/relaxer-a0e8f.appspot.com/o/images%2Fnoimage.jpg?alt=media&token=821454b2-2487-4c5c-9eed-f78fdde30b8d'],
+            disabledButton: true
         }
     }
 
     checkCategory = (value) => {
         this.setState({
             category: {
-                ...this.state.category,
                 [value]: true
             }
         })
@@ -61,7 +64,9 @@ class MainPage extends Component {
     }
     
     checkImg = (img) => {
-        imgOnServer = img;
+        this.setState({imgOnServer: []})
+        let imgOnServer = img.map(item => item.path);
+        this.setState({imgOnServer});
     }
 
     newDataTime = () => {
@@ -76,65 +81,148 @@ class MainPage extends Component {
     saveNews = async () => {
         this.newDataTime();
         let urlImg = [];
-        for(let i =0; i < imgOnServer.length;i++){
+        for(let i =0; i < this.state.imgOnServer.length;i++){
             let images = await  firebase.storage().ref(`images/${this.state.dateTime}/${i}`)
-            .putFile(imgOnServer[i].path);
+            .putFile(this.state.imgOnServer[i]);
             urlImg.push(images.downloadURL);
         }
         this.setState({urlImg});
         firebase.firestore().collection('data').doc(this.state.dateTime).set(this.state);
-        this.setState({ dateTime: 0,title: '',date: '',time: '',text: '',place: '',urlImg: [],
-            category: {dance: false,sport: false,it: false},
-            contacts: {telegrame: '',viber: '',inst: '',mobileNumber: '',site: ''},
-            })
+        this.setState({ dateTime: 0,title: '',date: '',time: '',text: '',place: '',urlImg: [],imgOnServer : ['https://firebasestorage.googleapis.com/v0/b/relaxer-a0e8f.appspot.com/o/images%2Fnoimage.jpg?alt=media&token=821454b2-2487-4c5c-9eed-f78fdde30b8d']
+        ,price: '', category: {dance: false, sport: false, it: false},contacts: {telegrame: '',viber: '',inst: '',mobileNumber: '',site: ''}});
     }
 
+    disableButton = () => {
+        const {time,title,date,text,place,category,contacts,disabledButton} = this.state;
+        var newDisableButton = true;
+    
+        if(time && title && date && text && place){
+            Object.keys(category).forEach(item => {
+                if(category[item]){
+                    Object.keys(contacts).forEach(item => {
+                        if(contacts[item]){
+                            newDisableButton = false;
+                        }
+                    })
+                }else{
+                    newDisableButton = true;
+                }
+            })
+
+        }else {
+            newDisableButton = true;
+        }
+
+        if(newDisableButton !== disabledButton ){
+            this.setState({disabledButton: newDisableButton});
+            
+        }
+
+    }
+
+    saveDataContacts = (newContacts) => {
+        this.setState({contacts: newContacts});
+    }
+
+    componentDidUpdate(){
+        this.disableButton();
+    }
 
     render(){
+        const {title,imgOnServer,price,text,place,disabledButton} = this.state;
+        console.log(this.state);
+        
+
         return( 
                 <ScrollView style={styles.mainConteiner}>
                     <Header
                         text={'Створити подію'}
                         navigation={this.props.navigation}/>
                     <View style={styles.conteinerItem}>
+                        <Text style={[styles.textBeforInput,{alignSelf: 'center',fontSize: 22,}]}>Назва заходу*: </Text>
                         <TextInput
+                            maxLength = {30}
+                            multiline = {true}
                             style={styles.TextInputTitle}
-                            placeholder='назва заходу'
-                            value={this.state.title}
+                            placeholder='Ігри розуму'
+                            value={title}
                             onChangeText={(title) => this.setState({title})}/>
                         <ChangeImage
                             checkImg={this.checkImg}/>
-                        <View style={{flexDirection: 'row'}}>
+                        
+                        <View style={styles.conteinerSlider}>
+                            <SliderImage
+                                images={imgOnServer}/>
+                        </View>
+
+                        <View style={{flexDirection: 'row',justifyContent: 'space-between'}}>
                             <Calendar
                                 selected={this.checkData}
                                 twoBottom={false}/>
                             <Time
                                 selected={this.checkTime}/>
                         </View>
-                        <CheckCategory
-                            checkCategory={this.checkCategory}/>
+
+                        <View style={{flexDirection: 'row',justifyContent: 'space-between',alignItems: 'center',marginVertical:7}}>
+                            <CheckCategory
+                                checkCategory={this.checkCategory}/>
+                            <TextInput
+                                maxLength={7}
+                                style={styles.TextInputPrice}
+                                placeholder='ціна входу'
+                                value={price}
+                                onChangeText={(price) => this.setState({price})}
+                                keyboardType='number-pad'/>
+                        </View>
+
+                        <Text style={styles.textBeforInput}>Деталі заходу*: </Text>
+                        <TextInput
+                            maxLength={500}
+                            style={styles.TextInputText}
+                            multiline = {true}
+                            numberOfLines = {4}
+                            placeholder='На Вас чекає унікальна нагода випробувати свою інтелектуальну спритність під час запеклого командного 
+                                        «мозкового турніру» і допомогти зібрати стипендії для талановитих та потребуючих студентів, які завтра 
+                                        поруч із нами будуть продовжувати змінювати країну.'
+                            value={text}
+                            onChangeText={(text) => this.setState({text})}/>
+
+                        <Text style={styles.textBeforInput}>Місце заходу*: </Text>
+                        <TextInput
+                            maxLength={100}
+                            style={styles.TextInputPlace}
+                            multiline = {true}
+                            numberOfLines = {2}
+                            placeholder='Київ, вул. Баcейна 1 (метро Площа Льва Толстого)'
+                            value={place}
+                            onChangeText={(place) => this.setState({place})}/>
+                        
+                        <Text style={styles.textBeforInput}>Контакти*: </Text>
+                        <ContactsLinks
+                        saveDataContacts={this.saveDataContacts}/>
+                        
+
                         <TouchableOpacity
                             onPress={this.saveNews}
-                            style={styles.buttonSave}>
+                            style={disabledButton?styles.disableButton:styles.buttonSave}
+                            disabled={disabledButton}>
                             <Text style={styles.textSave}>СТВОРИТИ</Text>
                         </TouchableOpacity>
+                        {disabledButton?<Text style={styles.disableText}>*Заповніть всі обов'язкові поля</Text>:null}
                     </View>
                 </ScrollView>
         )
     }
 }
-// Потрібно для відправки на сервер фото
-let imgOnServer = [];
 
 
 const styles = StyleSheet.create({
     TextInputTitle: {
-        width: '80%',
-        height: 30,
+        width: '90%',
         borderColor: 'rgba(0, 0, 0, 0.315)',
-        borderWidth: 2,
+        borderWidth: 2.5,
         alignSelf: 'center',
-        fontSize: 18,
+        fontSize: 20,
         textAlign: 'center',
         color: 'rgba(0, 0, 0, 0.7)',
         padding: 0,
@@ -164,13 +252,79 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-        borderRadius: 1
+        borderRadius: 2,
+        marginTop: 7
+    },
+    disableButton: {
+        width: '50%',
+        height: 40,
+        backgroundColor: 'rgba(56, 54, 54, 0.2)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        borderRadius: 2,
+        borderColor: 'red',
+        borderWidth: 1,
+        marginTop: 7
     },
     textSave: {
         fontSize: 20,
         letterSpacing: 4,
         color: 'rgba(255, 255, 255, 0.836)',
         fontWeight: 'bold',
+    },
+    conteinerSlider: {
+        width: Dimensions.get('window').width,
+        position: 'relative',
+        left:-25,
+        marginBottom: 10,
+        marginTop: 5
+    },
+    TextInputText: {
+        width: '95%',
+        borderColor: 'rgba(0, 0, 0, 0.315)',
+        borderWidth: 2.5,
+        alignSelf: 'center',
+        textAlignVertical: 'top',
+        fontSize: 18,
+        marginBottom: 15,
+        marginTop: 7,
+        paddingHorizontal: 4,
+        paddingVertical: 1,
+        textAlign: 'center',
+    },
+    TextInputPrice: {
+        width: 100,
+        height: 30,
+        borderColor: 'rgba(0, 0, 0, 0.315)',
+        borderWidth: 2.5,
+        fontSize: 18,
+        paddingVertical: 1.5,
+        textAlign: 'center',
+    },
+    TextInputPlace: {
+        width: '95%',
+        borderColor: 'rgba(0, 0, 0, 0.315)',
+        borderWidth: 2.5,
+        alignSelf: 'center',
+        textAlign: 'center',
+        paddingVertical: 1,
+        fontSize: 18,
+        marginBottom: 10
+    },
+    disableText: {
+        alignSelf: 'center',
+        fontSize: 14,
+        color: 'red',
+        marginTop: 2,
+        letterSpacing: 2
+    },
+    textBeforInput: {
+        fontSize: 20,
+        color: 'black',
+        letterSpacing: 3.5,
+        marginBottom: 7,
+        fontWeight: 'bold'
     }
 })
 

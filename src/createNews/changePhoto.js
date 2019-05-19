@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import {Dimensions, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import {BoxShadow} from 'react-native-shadow';
 import Icon from 'react-native-vector-icons/Feather';
-import SliderImage from '../sliderImages/sliderImages'
 
 export default class ChangePhoto extends Component {
 
@@ -37,9 +36,6 @@ export default class ChangePhoto extends Component {
               <Text style={styles.textButton}>Вибрати фото</Text>
           </TouchableOpacity>
         </BoxShadow>
-        {/* <View style={{width: Dimensions.get('window').width, position: 'relative',left:0}}>
-          <SliderImage images={this.state.urlImage}/>
-        </View> */}
       </View>
     );
   }

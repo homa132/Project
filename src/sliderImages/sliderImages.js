@@ -18,7 +18,6 @@ class App extends Component {
     return (
         <ImageSlider
           loop
-          autoPlayWithInterval={12000}
           images={this.props.images?this.props.images:null}
           onPress={({ index }) => alert(index)}
           customSlide={({ index, item, style, width }) => (

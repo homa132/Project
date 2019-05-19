@@ -19,7 +19,7 @@ export default class CheckCategory extends Component {
                 this.onMainComponent(value)}}
                     selectedValue={this.state.value}
                     style={styles.picker}>
-                <Picker.Item label='Виберіть категорію' value='Виберіть категорію'/>
+                <Picker.Item label='Виберіть категорію*' value='Виберіть категорію'/>
                 <Picker.Item label='спорт' value='sport'/>
                 <Picker.Item label='IT сфера' value='it'/>
                 <Picker.Item label='танці' value='dance'/>
@@ -34,8 +34,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(91, 245, 99, 0.801)',
         alignSelf: 'center',
         color: 'black',
-        marginBottom: 10,
-        marginTop: 5,
         height: 30,
     }
 })

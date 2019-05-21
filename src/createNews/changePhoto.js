@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity,Alert} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import {BoxShadow} from 'react-native-shadow';
 import Icon from 'react-native-vector-icons/Feather';
@@ -7,25 +7,34 @@ import Icon from 'react-native-vector-icons/Feather';
 export default class ChangePhoto extends Component {
 
   state = {
-    urlImage: ['']
+    urlImage: []
   }
 
   photos = () => {
-
     ImagePicker.openPicker({
-      multiple: true,
-      width: 800,
-      height:800,
+      width: 500,
+      height: 500,
       cropping: true,
-    }).then(images => {
-      this.setState({urlImage:images});
-      this.props.checkImg(this.state.urlImage)
-    });
-
+      compressImageMaxWidth: 1000,
+      compressImageMaxHeight: 1000,
+      compressImageQuality: 0.85,
+    }).then(image => {
+        let images = this.state.urlImage;
+        images.push(image);
+        this.setState({urlImage: images});
+        this.props.checkImg(this.state.urlImage);
+        Alert.alert(
+          'Фото',
+          'Бажаєте додати ще фото?',
+          [
+            {text: 'Ні',},
+            {text: 'Так', onPress: () => this.photos()},
+          ],
+        );
+    }).catch(e => alert(e));
   }
 
   render() {
-    
     return (
       <View style={styles.conteiner}>
         <BoxShadow setting={shadowButton}>

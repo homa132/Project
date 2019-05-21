@@ -9,7 +9,7 @@ const initState = {
     newData: false
 }
 
-export default (state = initState, action) => { 
+export default (state = initState, action) => {
     switch (action.type) {
 
         case ADD_CATEGORY:
@@ -21,6 +21,6 @@ export default (state = initState, action) => {
         case NEW_DATA:
             return {...state,newData: action.datas}
         
-            default: return state
+        default: return state
     }
 }

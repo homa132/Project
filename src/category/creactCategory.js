@@ -6,6 +6,7 @@ import CreateCalendar from '../calendar/calendarSecond';
 import {connect} from 'react-redux';
 import {filterData,setReservData} from '../../redux/actions/actions';
 import ListDrawer from './ListNavigation';
+import Search from '../search/search';
 
 class CreateCategory extends Component {
     constructor(props) {
@@ -31,7 +32,6 @@ class CreateCategory extends Component {
     }
 
     filter =  () => {
-        
         let data = this.props.state.newData;
         data.sort((a,b) => {
             return b.dateTime - a.dateTime
@@ -45,8 +45,8 @@ class CreateCategory extends Component {
             })
         }
 
-         this.props.filterData(data);
-         this.props.setReservData(data);
+        this.props.filterData(data);
+        this.props.setReservData(data);
     }
 
 
@@ -76,6 +76,7 @@ class CreateCategory extends Component {
                                     allDataItems={this.allDataItems}
                                     twoBottom={true}
                                     />
+                                <Search/>
                                 <ItemList
                                     category={this.props.state.category}
                                     navigation={this.props.navigation}
@@ -109,7 +110,7 @@ mapDispatchToProps = (dispatch) => {
     return {
         getData: () => dispatch(getData()),
         filterData: (data) => dispatch(filterData(data)),
-        setReservData: (data) => dispatch(setReservData(data))
+        setReservData: (data) => dispatch(setReservData(data)),
     }
 }
 

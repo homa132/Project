@@ -41,8 +41,6 @@ export default class Item extends Component {
             if(name == 'messenger'){return 'Messenger'}
         }
         return keys.map((item,index) => {
-            console.log(contacts[item] != ' ');
-            
             return contacts[item] != ' '?
             <TouchableOpacity
             onPress={() => this.openUrl(contacts[item])}
@@ -55,10 +53,9 @@ export default class Item extends Component {
     }
 
     render(){
-        const { urlImg, date, title,category,time,text,contacts,place,price} = this.props.item;
+        const { urlImg, date, title,category,time,text,place,price} = this.props.item;
         let key = Object.keys(category);
-        let keys = Object.keys(contacts);
-        
+                
         return (
             <View style={styles.conteiner}>
                 <Text style={styles.title}>{title}</Text>
@@ -133,15 +130,16 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
     },
     conteinerMore: {
-        width: 115,
+        width: 120,
         backgroundColor: 'rgba(0, 59, 15, 0.842)',
-        height: 25,
+        height: 30,
         alignItems: 'center',
         justifyContent: 'space-around',
         borderColor: 'rgba(0, 59, 15, 0.5)',
         borderWidth: 3,
         flexDirection: 'row',
         marginVertical: 3,
+        borderRadius: 5
     },
     textMore: {
         color: 'rgba(255, 255, 255, 0.842)',
@@ -179,7 +177,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginRight: 10,
         paddingHorizontal: 5,
-        borderRadius: 1.5,
+        borderRadius: 5,
         marginBottom: 7
     },
     openUrlText: {

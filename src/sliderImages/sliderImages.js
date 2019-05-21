@@ -5,7 +5,6 @@ import {
   Text,
   View,
   Image,
-  TouchableHighlight,
 } from 'react-native';
 
 import ImageSlider from 'react-native-image-slider';
@@ -14,23 +13,20 @@ class App extends Component {
   
   render() {
     
-    
     return (
         <ImageSlider
           loop
-          images={this.props.images?this.props.images:null}
-          onPress={({ index }) => alert(index)}
+          images={this.props.images}
           customSlide={({ index, item, style, width }) => (
-            // It's important to put style here because it's got offset inside
             <View
               key={index}
               style={[
                 style,
                 styles.customSlide,
-                { width },
+                {width},
               ]}
             >
-              <Image source={{ uri: item }} style={styles.customImage} />
+              <Image source={{ uri: item }} style={styles.customImage}/>
             </View>
           )}
         />

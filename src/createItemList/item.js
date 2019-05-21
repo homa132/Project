@@ -31,17 +31,19 @@ export default class Item extends Component {
             if(name == 'viber'){return 'vimeo-square'}
             if(name == 'inst'){return 'instagram'}
             if(name == 'site'){return 'globe'}
-            if(name == 'other'){return 'google'}
+            if(name == 'messenger'){return 'facebook'}
         }
         const hawText= (name) => {
             if(name == 'telegrame'){return 'Telegram'}
             if(name == 'viber'){return 'Viber'}
             if(name == 'inst'){return 'Instagram'}
             if(name == 'site'){return 'Сайт'}
-            if(name == 'other'){return 'Інший'}
+            if(name == 'messenger'){return 'Messenger'}
         }
         return keys.map((item,index) => {
-            return contacts[item]?
+            console.log(contacts[item] != ' ');
+            
+            return contacts[item] != ' '?
             <TouchableOpacity
             onPress={() => this.openUrl(contacts[item])}
             key={Math.random()}

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, TouchableOpacity,Text, StyleSheet,TextInput, ScrollView,Dimensions, Linking} from 'react-native';
+import { View, TouchableOpacity,Text, StyleSheet,TextInput, ScrollView,Dimensions, ActivityIndicator} from 'react-native';
 import Calendar from '../calendar/calendarSecond';
 import {connect} from 'react-redux'
 import {pushNewNews} from '../../redux/actions/actions';
@@ -10,6 +10,7 @@ import Header from '../header/headerCreate';
 import firebase from 'react-native-firebase';
 import SliderImage from '../sliderImages/sliderImages'
 import ContactsLinks from './contactsLinks';
+import Loader from '../activityIndicator/activityIndicator'
 
 class MainPage extends Component {
     constructor(props){
@@ -35,7 +36,8 @@ class MainPage extends Component {
             },
             urlImg: [],
             imgOnServer: ['https://firebasestorage.googleapis.com/v0/b/relaxer-a0e8f.appspot.com/o/images%2Fnoimage.jpg?alt=media&token=821454b2-2487-4c5c-9eed-f78fdde30b8d'],
-            disabledButton: true
+            disabledButton: true,
+            saving: false
         }
     }
 
@@ -78,7 +80,9 @@ class MainPage extends Component {
         this.setState({dateTime})
     }
 
-    saveNews = async () => {
+    saveNews =  async () => {
+        this.state.saving = true;
+
         this.newDataTime();
         let urlImg = [];
         for(let i =0; i < this.state.imgOnServer.length;i++){
@@ -88,8 +92,7 @@ class MainPage extends Component {
         }
         this.setState({urlImg});
         firebase.firestore().collection('data').doc(this.state.dateTime).set(this.state);
-        this.setState({ dateTime: 0,title: '',date: '',time: '',text: '',place: '',urlImg: [],imgOnServer : ['https://firebasestorage.googleapis.com/v0/b/relaxer-a0e8f.appspot.com/o/images%2Fnoimage.jpg?alt=media&token=821454b2-2487-4c5c-9eed-f78fdde30b8d']
-        ,price: '', category: {dance: false, sport: false, it: false},contacts: {telegrame: '',viber: '',inst: '',mobileNumber: '',site: ''}});
+        this.setState(startState)
     }
 
     disableButton = () => {
@@ -129,9 +132,7 @@ class MainPage extends Component {
     }
 
     render(){
-        const {title,imgOnServer,price,text,place,disabledButton} = this.state;
-        console.log(this.state);
-        
+        const {title,imgOnServer,price,text,place,disabledButton,saving} = this.state;
 
         return( 
                 <ScrollView style={styles.mainConteiner}>
@@ -139,6 +140,8 @@ class MainPage extends Component {
                         text={'Створити подію'}
                         navigation={this.props.navigation}/>
                     <View style={styles.conteinerItem}>
+                        {saving?<View style={styles.loader}><Loader/><Text style={styles.loaderText}>Збереження події</Text></View>:null}
+
                         <Text style={[styles.textBeforInput,{alignSelf: 'center',fontSize: 22,}]}>Назва заходу*: </Text>
                         <TextInput
                             maxLength = {30}
@@ -199,7 +202,8 @@ class MainPage extends Component {
                         
                         <Text style={styles.textBeforInput}>Контакти*: </Text>
                         <ContactsLinks
-                        saveDataContacts={this.saveDataContacts}/>
+                        saveDataContacts={this.saveDataContacts}
+                        save={saving}/>
                         
 
                         <TouchableOpacity
@@ -214,6 +218,31 @@ class MainPage extends Component {
         )
     }
 }
+
+const startState = state = {
+    dateTime: 0,
+    title: '',
+    date: '',
+    time: '',
+    text: '',
+    category: {
+        dance: false,
+        sport: false,
+        it: false
+    },
+    price: '',
+    place: '',
+    contacts: {
+        telegrame: '',
+        viber: '',
+        inst: '',
+        site: '',
+    },
+    urlImg: [],
+    imgOnServer: ['https://firebasestorage.googleapis.com/v0/b/relaxer-a0e8f.appspot.com/o/images%2Fnoimage.jpg?alt=media&token=821454b2-2487-4c5c-9eed-f78fdde30b8d'],
+    disabledButton: true,
+    saving: false
+};
 
 
 const styles = StyleSheet.create({
@@ -325,6 +354,24 @@ const styles = StyleSheet.create({
         letterSpacing: 3.5,
         marginBottom: 7,
         fontWeight: 'bold'
+    },
+    loader: {
+        position: 'absolute',
+        top: 1000,
+        alignSelf: 'center',
+        width: 250,
+        height: 80,
+        backgroundColor: 'rgba(72, 190, 68, 0.938)',
+        zIndex: 1000,
+        borderRadius: 10,
+        alignItems: 'center',
+        padding: 15
+    },
+    loaderText: {
+        fontSize: 22,
+        color: 'rgba(255, 255, 255, 0.938)',
+        letterSpacing: 4,
+        textAlign: 'center'
     }
 })
 

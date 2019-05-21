@@ -3,20 +3,26 @@ import {View,Text,TouchableOpacity,StyleSheet,TextInput,Linking} from 'react-nat
 
 export default class  ContactsLinks extends Component {
 
-    state = {
+    constructor(props){
+        super(props);
+        this.state = {
         contacts: {
             telegrame: '',
             viber: '',
             inst: '',
             site: '',
+            messenger: ''
         },
         newContacts: {
             telegrame: ' ',
             viber: ' ',
             inst: ' ',
             site: ' ',
+            messenger: ' '
         },
     }
+    }
+    
 
     changeText = (data,name) => {
         const {newContacts,contacts} = this.state;
@@ -47,13 +53,27 @@ export default class  ContactsLinks extends Component {
         })
     }
 
+    saving = () => {
+        const {contacts} =this.state;
+        Object.keys(contacts).forEach(item => {
+            if(contacts[item] != ''){
+                if(this.props.save){
+                    this.setState({contacts: {telegrame: '',viber: '',inst: '',site: '',messenger: ''},
+                                newContacts: { telegrame: ' ',viber: ' ',inst: ' ',site: ' ',messenger: ' '},})
+                }
+            }
+        })
+    }
+
     componentDidUpdate(){
         this.validateData();
+        this.saving()
     }
 
     render(){
         const { newContacts } = this.state;
         const {contactsItem, TextInputContacts,contactsItemView,contactsItemViewText,TextInputContactsError,noCorrectData} = styles;
+        
         return (
         <React.Fragment>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -109,6 +129,21 @@ export default class  ContactsLinks extends Component {
                             onChangeText={(viber) => this.changeText(viber,'viber')}/>
                         {newContacts.viber?null
                                 :<Text style={noCorrectData}>*Введіть коректні данні</Text>}
+
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <Text style={contactsItem}>Messenger: </Text>
+                        </View>
+                        <TextInput
+                            maxLength={50}
+                            style={newContacts.messenger?TextInputContacts:[TextInputContacts,TextInputContactsError]}
+                            multiline = {true}
+                            placeholder=' http://m.me/'
+                            textContentType='URL'
+                            value={this.state.contacts.messenger}
+                            onChangeText={(messenger) => this.changeText(messenger,'messenger')}/>
+                            {newContacts.messenger?null
+                                :<Text style={noCorrectData}>*Введіть коректні данні</Text>}
+
                         
                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                             <Text style={contactsItem}>Сайт: </Text>

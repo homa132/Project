@@ -12,8 +12,6 @@ const Navigation =  createAppContainer(DrawerNav);
 
 class App extends Component {
 
- 
-
     render() {
       return (
         <Provider store={store}>

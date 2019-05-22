@@ -17,7 +17,7 @@ const Header = (props) => {
                             <Text style={styles.headerText}>{props.text}</Text>
                     <BoxShadow setting={shadowButton}>
                         <TouchableOpacity style={styles.buttonConteiner}
-                         onPress={() => props.navigation.replace('Create')}>
+                         onPress={() => props.navigation.replace('Auth')}>
                             <Icon name='fiber-new' size={35} color="#000000" />                  
                         </TouchableOpacity>
                     </BoxShadow>

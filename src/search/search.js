@@ -47,6 +47,7 @@ class Search extends Component {
             value={this.state.valueForSearch}
             onChangeText = {(valueForSearch) => this.searchTitile(valueForSearch)}
             style={styles.input}
+            placeholder='ПОШУК ПОДІЙ'
             />
         )
     }
@@ -67,11 +68,14 @@ export default connect(mapStateToProps,mapDispatchToProps)(Search);
 
 const styles = StyleSheet.create({
     input: {
-        borderColor: 'red',
-        borderWidth: 1,
+        borderColor: 'rgba(47, 102, 45, 0.945)',
+        borderWidth: 2,
         width: '75%',
         alignSelf: 'center',
         paddingVertical: 0.5,
-        marginBottom: 15,
+        marginTop: 10,
+        borderRadius: 4,
+        textAlign: 'center',
+        fontSize: 18
     }
 })

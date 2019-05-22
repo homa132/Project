@@ -4,8 +4,8 @@ import MainPage from '../page/main';
 import CreatePage from '../page/createChill';
 import DiscoPage from '../category/disko';
 import ItPage from '../category/it';
-
-
+import Auth from '../page/auth';
+import Register from '../page/registers';
 
 const AppNavigator = createStackNavigator(
   {
@@ -28,6 +28,12 @@ const AppNavigator = createStackNavigator(
     IT: {
       screen:ItPage,
       
+    },
+    Auth: {
+      screen: Auth
+    },
+    Register : {
+      screen: Register
     }
   },{
     headerMode: 'none',

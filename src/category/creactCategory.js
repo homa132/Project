@@ -71,12 +71,13 @@ class CreateCategory extends Component {
                                     navigation={this.props.navigation}
                                     openDrawer={this.openDrawer}
                                     />
+                                <Search/>
+                                
                                 <CreateCalendar
                                     selected={this.selectedData}
                                     allDataItems={this.allDataItems}
                                     twoBottom={true}
                                     />
-                                <Search/>
                                 <ItemList
                                     category={this.props.state.category}
                                     navigation={this.props.navigation}
